@@ -5,8 +5,21 @@
 
 (rpc/init)
 
+(def number (cell nil))
+(def numbers (cell []))
+
 (html
   (head
     (link :rel "stylesheet" :type "text/css" :href "css/main.css"))
   (body
-    (h1 (text "Hello, Hoplon and Castra World! ~{random}"))))
+    ;;(h1 (text "Hello, Hoplon and Castra World! ~{random}"))
+    (h1 (text "Hello, Hoplon and Castra World!"))
+    (input :value number :change #(reset! number @%))
+    (button :click #(swap! numbers conj @number) (text "Add one"))
+    (ul
+      (loop-tpl :bindings [n numbers]
+        (li (cell= (str n)))))
+    (span
+      (button :click #(apply rpc/add-numbers @numbers) (text "Send"))
+      (text "  ~{rpc/add-result}"))
+        ))

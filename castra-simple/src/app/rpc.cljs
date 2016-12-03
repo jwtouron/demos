@@ -14,6 +14,10 @@
 (def get-state
   (mkremote 'app.api/get-state state error loading))
 
+(defc add-result nil)
+(def add-numbers
+  (mkremote 'app.api/add-numbers add-result error loading))
+
 (defn init []
   (get-state)
   (js/setInterval get-state 1000))
