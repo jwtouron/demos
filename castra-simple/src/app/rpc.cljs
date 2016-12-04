@@ -1,6 +1,6 @@
 (ns app.rpc
   (:require-macros
-    [javelin.core :refer [defc defc=]])
+   [javelin.core :refer [defc defc=]])
   (:require
    [javelin.core]
    [castra.core :refer [mkremote]]))
@@ -17,6 +17,10 @@
 (defc add-result nil)
 (def add-numbers
   (mkremote 'app.api/add-numbers add-result error loading))
+
+(defc upload-file-cell nil)
+(def upload-file
+  (mkremote 'app.api/upload-file upload-file-cell upload-file-cell upload-file-cell))
 
 (defn init []
   (get-state)

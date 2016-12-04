@@ -22,4 +22,17 @@
     (span
       (button :click #(apply rpc/add-numbers @numbers) (text "Send"))
       (text "  ~{rpc/add-result}"))
-        ))
+
+    (h1 "File Upload")
+    (form :submit #(let [file (-> "file-upload" js/document.getElementById .-files (aget 0)) ; not checking that something selected
+                         r (js/FileReader.)]
+                     (set! (.-onload r)
+                           (fn []
+                             (let [contents (js/Uint8Array. (.-result r) 0 (.-byteLength (.-result r)))]
+                               ;; should maybe assert here that (.-size file) matches (.-byteLength (.-result r))
+                               (rpc/upload-file {:size (.-size file)
+                                                 :bytes contents
+                                                 :name (.-name file)}))))
+                     (.readAsArrayBuffer r file))
+      (input :type "file" :id "file-upload")
+      (input :type "submit" "Submit"))))
